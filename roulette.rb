@@ -6,7 +6,7 @@ class Roulette
   class LOSE; end
 
   class WinningsCalculator
-    PAYOUTS = { straight: 35, rob: 1 }
+    PAYOUTS = { straight: 35, rob: 1, manque: 1, passe: 1, eoo: 1, dozens: 2, snake: 2 }
 
     def self.calculate(gametype, bet)
       if PAYOUTS.include?(gametype.to_sym)
