@@ -11,22 +11,22 @@ class Game
     black: [15,4,2,17,6,13,11,8,10,24,33,20,31,22,29,28,35,26]
   }
 
-  BETS = {
-    'straight' => ->(bet, roll){ bet.to_i == roll },
-    'rob' => ->(bet, roll){ BOARD[bet.to_sym].include? roll },
-    'manque' => ->(bet, roll){ (1..18).include? roll },
-    'passe' => ->(bet, roll) { (19..36).include? roll },
-    'eoo' => ->(bet, roll) { (bet == 'even' && roll.even?) || (bet == 'odd' && roll.odd?) },
-    'dozens' => ->(bet, roll) { {'first' => 1..12, 'second' => 13..24, 'third' => 25..36}[bet].include?(roll) },
-    'snake' => ->(bet, roll) { [1, 5, 9, 12, 14, 16, 19, 23, 27, 30, 32, 34].include? roll }
+  WINNING_CONDITIONS = {
+    'straight' => ->(number, roll){ number.to_i == roll },
+    'rob' => ->(color, roll){ BOARD[color.to_sym].include? roll },
+    'manque' => ->(_, roll){ (1..18).include? roll },
+    'passe' => ->(_, roll) { (19..36).include? roll },
+    'eoo' => ->(evenness, roll) { (evenness == 'even' && roll.even?) || (evenness == 'odd' && roll.odd?) },
+    'dozens' => ->(third_name, roll) { {'first' => 1..12, 'second' => 13..24, 'third' => 25..36}[third_name].include?(roll) },
+    'snake' => ->(_, roll) { [1, 5, 9, 12, 14, 16, 19, 23, 27, 30, 32, 34].include? roll }
   }
 
   def initialize(user_input)
     @roll = rand(37)
-    @gametype, @bet = user_input.strip.downcase.split(' ')
+    @gametype, @gametype_argument = user_input.strip.downcase.split(' ')
   end
 
   def play
-    BETS[@gametype].call(@bet, @roll) ? WIN : LOSE
+    WINNING_CONDITIONS[@gametype].call(@gametype_argument, @roll) ? WIN : LOSE
   end
 end
