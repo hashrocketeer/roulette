@@ -57,5 +57,9 @@ class GameTest < Minitest::Test
     assert_equal game.play, Game::WIN
     game.roll = 0
     assert_equal game.play, Game::LOSE
+
+    game = Game.new('Snake')
+    game.roll = 5
+    assert_equal game.play, Game::WIN
   end
 end

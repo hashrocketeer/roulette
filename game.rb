@@ -23,7 +23,7 @@ class Game
 
   def initialize(user_input)
     @roll = rand(37)
-    @gametype, @bet = user_input.strip.split(' ')
+    @gametype, @bet = user_input.strip.downcase.split(' ')
   end
 
   def play
