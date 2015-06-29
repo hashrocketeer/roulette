@@ -3,6 +3,11 @@ require './game'
 while(true) do
   puts "You are playing roullete what is your bet?"
   user_input = gets
-  result = Game.new.play(user_input)
-  puts result
+  game = Game.new(user_input)
+  result = game.play
+  if result == Game::WIN
+    puts "You win the #{game.gametype} bet"
+  else
+    puts 'You lose'
+  end
 end
