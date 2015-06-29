@@ -5,6 +5,16 @@ class Game
   class WIN; end
   class LOSE; end
 
+  class WinningsCalculator
+    PAYOUTS = { straight: 35, rob: 1 }
+
+    def self.calculate(gametype, bet)
+      if PAYOUTS.include?(gametype.to_sym)
+        PAYOUTS[gametype.to_sym] * bet
+      end
+    end
+  end
+
   BOARD = {
     red: [32,19,21,25,34,27,36,30,23,5,16,1,14,9,18,7,12,3],
     green: [0],
@@ -23,10 +33,16 @@ class Game
 
   def initialize(user_input)
     @roll = rand(37)
-    @gametype, @gametype_argument = user_input.strip.downcase.split(' ')
+    @gametype, @gametype_argument, @bet = user_input.strip.downcase.split(' ')
+    @bet = @bet.to_i
   end
 
   def play
-    WINNING_CONDITIONS[@gametype].call(@gametype_argument, @roll) ? WIN : LOSE
+    if WINNING_CONDITIONS[@gametype].call(@gametype_argument, @roll)
+      money = WinningsCalculator.calculate(@gametype, @bet)
+      [WIN, money]
+    else
+      [LOSE, @bet]
+    end
   end
 end

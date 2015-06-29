@@ -3,63 +3,40 @@ require './game'
 
 class GameTest < Minitest::Test
   def test_play
-    game = Game.new('straight 32')
-    game.roll = 32
-    assert_equal game.play, Game::WIN
-    game.roll = 31
-    assert_equal game.play, Game::LOSE
+    play_roulette('straight 32 100', 32, Game::WIN)
+    play_roulette('straight 31 100', 32, Game::LOSE)
 
-    game = Game.new('rob red')
-    game.roll = 32
-    game = Game.new('rob black')
-    game.roll = 15
-    assert_equal game.play, Game::WIN
+    play_roulette('rob red 100', 32, Game::WIN)
+    play_roulette('rob red 100', 15, Game::LOSE)
 
-    game = Game.new('manque')
-    game.roll = 12
-    assert_equal game.play, Game::WIN
-    game.roll = 20
-    assert_equal game.play, Game::LOSE
-    game.roll = 0
-    assert_equal game.play, Game::LOSE
+    play_roulette('manque', 12, Game::WIN)
+    play_roulette('manque', 20, Game::LOSE)
+    play_roulette('manque', 0, Game::LOSE)
 
-    game = Game.new('passe')
-    game.roll = 20
-    assert_equal game.play, Game::WIN
-    game.roll = 12
-    assert_equal game.play, Game::LOSE
+    play_roulette('passe', 20, Game::WIN)
+    play_roulette('passe', 12, Game::LOSE)
 
-    game = Game.new('eoo even')
-    game.roll = 2
-    assert_equal game.play, Game::WIN
-    game.roll = 3
-    assert_equal game.play, Game::LOSE
-    game = Game.new('eoo odd')
-    game.roll = 3
-    assert_equal game.play, Game::WIN
-    game.roll = 2
-    assert_equal game.play, Game::LOSE
+    play_roulette('eoo even', 2, Game::WIN)
+    play_roulette('eoo even', 3, Game::LOSE)
+    play_roulette('eoo odd', 3, Game::WIN)
+    play_roulette('eoo odd', 2, Game::LOSE)
 
-    game = Game.new('dozens first')
-    game.roll = 6
-    assert_equal game.play, Game::WIN
-    game.roll = 0
-    assert_equal game.play, Game::LOSE
-    game = Game.new('dozens second')
-    game.roll = 18
-    assert_equal game.play, Game::WIN
-    game = Game.new('dozens third')
-    game.roll = 32
-    assert_equal game.play, Game::WIN
+    play_roulette('dozens first', 2, Game::WIN)
+    play_roulette('dozens first', 22, Game::LOSE)
+    play_roulette('dozens second', 22, Game::WIN)
+    play_roulette('dozens second', 32, Game::LOSE)
+    play_roulette('dozens third', 32, Game::WIN)
+    play_roulette('dozens third', 2, Game::LOSE)
 
-    game = Game.new('snake')
-    game.roll = 5
-    assert_equal game.play, Game::WIN
-    game.roll = 0
-    assert_equal game.play, Game::LOSE
+    play_roulette('snake', 5, Game::WIN)
+    play_roulette('snake', 0, Game::LOSE)
 
-    game = Game.new('Snake')
-    game.roll = 5
-    assert_equal game.play, Game::WIN
+    play_roulette('Snake', 5, Game::WIN)
+  end
+
+  def play_roulette(input, roll, result)
+    game = Game.new(input)
+    game.roll = roll
+    assert_equal game.play.first, result
   end
 end
