@@ -1,4 +1,4 @@
-class Game
+class Roulette
   attr_accessor :roll
   attr_reader :gametype
 
