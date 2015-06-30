@@ -8,9 +8,6 @@ while(true) do
 
   roulette = Roulette.new(game_args, bet)
   result, money = roulette.play
-  if result == Roulette::WIN
-    puts "You win the #{roulette.gametype} bet, and $#{money}."
-  else
-    puts "You lose the #{roulette.gametype} bet, and $#{money}."
-  end
+  result = result.to_s.split('::').last.downcase
+  puts "You #{result} the #{roulette.gametype} bet, and #{result} $#{money}."
 end
