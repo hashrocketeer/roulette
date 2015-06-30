@@ -12,8 +12,8 @@ while(true) do
     result = result.to_s.split('::').last.downcase
     puts "You #{result} the #{roulette.gametype} bet, and #{result} $#{money}."
   rescue InvalidGametypeError
-    puts 'That is not a valid gametype sir'
+    puts 'That is not a valid gametype!'
   rescue InvalidSplitError
-    puts 'That is not a valid split bet sir'
+    puts 'That is not a valid split bet!'
   end
 end

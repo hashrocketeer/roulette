@@ -10,5 +10,7 @@ class WinningsCalculatorTest < Minitest::Test
     assert_equal Roulette::WinningsCalculator.calculate('eoo', 100), 100
     assert_equal Roulette::WinningsCalculator.calculate('dozens', 100), 200
     assert_equal Roulette::WinningsCalculator.calculate('snake', 100), 200
+    assert_equal Roulette::WinningsCalculator.calculate('split', 100), 1700
+    assert_equal Roulette::WinningsCalculator.calculate('street', 100), 1100
   end
 end
