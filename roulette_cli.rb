@@ -6,8 +6,14 @@ while(true) do
   puts "And what is your bet?"
   bet = gets
 
-  roulette = Roulette.new(game_args, bet)
-  result, money = roulette.play
-  result = result.to_s.split('::').last.downcase
-  puts "You #{result} the #{roulette.gametype} bet, and #{result} $#{money}."
+  begin
+    roulette = Roulette.new(game_args, bet)
+    result, money = roulette.play
+    result = result.to_s.split('::').last.downcase
+    puts "You #{result} the #{roulette.gametype} bet, and #{result} $#{money}."
+  rescue InvalidGametypeError
+    puts 'That is not a valid gametype sir'
+  rescue InvalidSplitError
+    puts 'That is not a valid split bet sir'
+  end
 end
