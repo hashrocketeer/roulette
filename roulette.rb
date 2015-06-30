@@ -1,3 +1,5 @@
+class InvalidSplitError < StandardError; end
+
 class Roulette
   attr_accessor :roll
   attr_reader :gametype
@@ -28,16 +30,23 @@ class Roulette
     'passe' => ->(_, roll) { (19..36).include? roll },
     'eoo' => ->(evenness, roll) { (evenness == 'even' && roll.even?) || (evenness == 'odd' && roll.odd?) },
     'dozens' => ->(third_name, roll) { {'first' => 1..12, 'second' => 13..24, 'third' => 25..36}[third_name].include?(roll) },
-    'snake' => ->(_, roll) { [1, 5, 9, 12, 14, 16, 19, 23, 27, 30, 32, 34].include? roll }
+    'snake' => ->(_, roll) { [1, 5, 9, 12, 14, 16, 19, 23, 27, 30, 32, 34].include? roll },
+    'split' => ->(args, roll) { args.include? roll.to_s }
   }
 
-  def initialize(user_input)
+  def initialize(game_args, bet)
     @roll = rand(37)
-    @gametype, @gametype_argument, @bet = user_input.strip.downcase.split(' ')
-    @bet = @bet.to_i
+    @gametype, *@gametype_argument = game_args.strip.downcase.split(' ')
+    @bet = bet.to_i
   end
 
   def play
+    @gametype_argument = (@gametype_argument.length == 1 ? @gametype_argument.first : @gametype_argument)
+    first, second = @gametype_argument
+    if (@gametype == 'split') && !([first.to_i - 1, first.to_i - 3, first.to_i + 1, first.to_i + 3].include?(second.to_i))
+      raise InvalidSplitError
+    end
+
     if WINNING_CONDITIONS[@gametype].call(@gametype_argument, @roll)
       money = WinningsCalculator.calculate(@gametype, @bet)
       [WIN, money]
