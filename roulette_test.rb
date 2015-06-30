@@ -32,6 +32,8 @@ class RouletteTest < Minitest::Test
     play_roulette('snake', 0, Roulette::LOSE)
 
     play_roulette('Snake', 5, Roulette::WIN)
+
+    assert_raises(InvalidGametypeError) { play_roulette('foo', 5, Roulette::WIN) }
   end
 
   def test_split_bet

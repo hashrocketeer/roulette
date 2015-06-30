@@ -1,4 +1,5 @@
 class InvalidSplitError < StandardError; end
+class InvalidGametypeError < StandardError; end
 
 class Roulette
   attr_accessor :roll
@@ -45,6 +46,10 @@ class Roulette
     first, second = @gametype_argument
     if (@gametype == 'split') && !([first.to_i - 1, first.to_i - 3, first.to_i + 1, first.to_i + 3].include?(second.to_i))
       raise InvalidSplitError
+    end
+
+    if !WINNING_CONDITIONS.include?(@gametype)
+      raise InvalidGametypeError
     end
 
     if WINNING_CONDITIONS[@gametype].call(@gametype_argument, @roll)
