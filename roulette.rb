@@ -1,3 +1,5 @@
+require './squares'
+
 class InvalidSplitError < StandardError; end
 class InvalidGametypeError < StandardError; end
 
@@ -9,7 +11,7 @@ class Roulette
   class LOSE; end
 
   class WinningsCalculator
-    PAYOUTS = { straight: 35, rob: 1, manque: 1, passe: 1, eoo: 1, dozens: 2, snake: 2, split: 17, street: 11 }
+    PAYOUTS = { straight: 35, rob: 1, manque: 1, passe: 1, eoo: 1, dozens: 2, snake: 2, split: 17, street: 11, corner: 8 }
 
     def self.calculate(gametype, bet)
       if PAYOUTS.include?(gametype.to_sym)
@@ -33,6 +35,7 @@ class Roulette
     'dozens' => ->(third_name, roll) { {'first' => 1..12, 'second' => 13..24, 'third' => 25..36}[third_name].include?(roll) },
     'snake' => ->(_, roll) { [1, 5, 9, 12, 14, 16, 19, 23, 27, 30, 32, 34].include? roll },
     'split' => ->(split_pair, roll) { split_pair.include? roll.to_s },
+    'corner' => ->(numbers, roll) { Squares.win?(numbers.map(&:to_i), roll) },
     'street' => ->(number, roll) do
       number = number.to_i
       number += 1 until number % 3 == 0

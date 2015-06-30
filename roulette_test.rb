@@ -40,6 +40,11 @@ class RouletteTest < Minitest::Test
     play_roulette('street 35', 34, Roulette::WIN)
     play_roulette('street 35', 30, Roulette::LOSE)
     play_roulette('street 31', 33, Roulette::WIN)
+
+    play_roulette('corner 1 2 4 5', 1, Roulette::WIN)
+    play_roulette('corner 1 2 4 6', 1, Roulette::LOSE)
+    play_roulette('corner 1 2 20 32', 1, Roulette::LOSE)
+    play_roulette('corner 1 2 4 5', 7, Roulette::LOSE)
   end
 
   def test_split_bet
@@ -53,9 +58,9 @@ class RouletteTest < Minitest::Test
 
   private
 
-  def play_roulette(input, roll, result)
+  def play_roulette(input, roll, result, line=0)
     game = Roulette.new(input, 100)
     game.roll = roll
-    assert_equal game.play.first, result
+    assert_equal(result, game.play.first, "test from line #{line} failed")
   end
 end
